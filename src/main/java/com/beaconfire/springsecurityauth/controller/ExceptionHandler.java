@@ -1,10 +1,7 @@
 package com.beaconfire.springsecurityauth.controller;
 
 import com.beaconfire.springsecurityauth.domain.response.ErrorResponse;
-import com.beaconfire.springsecurityauth.exception.RegisterEmailDuplicateException;
-import com.beaconfire.springsecurityauth.exception.RegisterInfoMissingException;
-import com.beaconfire.springsecurityauth.exception.RegisterUsernameDuplicateException;
-import com.beaconfire.springsecurityauth.exception.SaveFailedException;
+import com.beaconfire.springsecurityauth.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +28,8 @@ public class ExceptionHandler {
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .message(e.getMessage())
+                        .exceptionType(e.toString().split(":")[0])
+                        .status(String.valueOf( HttpStatus.INTERNAL_SERVER_ERROR))
                         .build(),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
@@ -45,11 +44,26 @@ public class ExceptionHandler {
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .message(e.getMessage())
+                        .exceptionType(e.toString().split(":")[0])
+                        .status(String.valueOf( HttpStatus.BAD_REQUEST))
                         .build(),
                 HttpStatus.BAD_REQUEST
         );
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {
+            InvalidCredentialsException.class
+    })
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(Exception e){
+        return new ResponseEntity<>(
+                ErrorResponse.builder()
+                        .message(e.getMessage())
+                        .exceptionType(e.toString().split(":")[0])
+                        .status(String.valueOf(HttpStatus.FORBIDDEN))
+                        .build(),
+                HttpStatus.FORBIDDEN
+        );
+    }
 
 
 }

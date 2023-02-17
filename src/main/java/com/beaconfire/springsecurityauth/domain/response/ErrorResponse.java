@@ -10,4 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class ErrorResponse {
      private String message;
+     private String exceptionType;
+     private String status;
 }

@@ -2,6 +2,7 @@ package com.beaconfire.springsecurityauth.controller;
 
 import com.beaconfire.springsecurityauth.domain.request.LoginRequest;
 import com.beaconfire.springsecurityauth.domain.response.LoginResponse;
+import com.beaconfire.springsecurityauth.exception.InvalidCredentialsException;
 import com.beaconfire.springsecurityauth.security.AuthUserDetail;
 import com.beaconfire.springsecurityauth.security.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class LoginController {
                   new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword() )
           );
         } catch (AuthenticationException e){
-            throw new BadCredentialsException("Provided credential is invalid.");
+
+            throw new InvalidCredentialsException("Incorrect credentials, please try again");
         }
 
         //Successfully authenticated user will be stored in the authUserDetail object

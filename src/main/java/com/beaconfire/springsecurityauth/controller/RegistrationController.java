@@ -45,6 +45,7 @@ public class RegistrationController {
 //                .password(request.getPassword())
                 .email(request.getEmail())
                 .isAdmin(false).build();
+
         registerService.saveUser(newUser);
 
         return ResponseHandler.generateResponse(
